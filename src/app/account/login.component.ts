@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '../_services';
+import { AccountService, AlertService } from '@app/_services';
 
 @Component({ templateUrl: 'login.component.html', standalone: false})
 export class LoginComponent implements OnInit {
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         this.submitting = true;
         this.cdr.detectChanges();
 
-        this.accountService.login(this.f.email.value, this.f.password.value)
+        this.accountService.login(this.f['email'].value, this.f['password'].value)
         .pipe(first())
         .subscribe({
             next: () => {

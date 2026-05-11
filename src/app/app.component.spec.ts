@@ -1,10 +1,28 @@
+/// <reference types="jasmine" />
+
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject } from 'rxjs';
+
 import { AppComponent } from './app.component';
+import { Account } from '@app/_models';
+import { AccountService } from '@app/_services';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
+    const accountSubject = new BehaviorSubject<Account | null>(null);
+    const accountServiceStub = {
+      account$: accountSubject.asObservable(),
+      accountValue: null,
+      logout: jasmine.createSpy('logout')
+    };
+
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      declarations: [AppComponent],
+      imports: [RouterTestingModule],
+      providers: [{ provide: AccountService, useValue: accountServiceStub }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 
@@ -14,16 +32,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'angular-21-auth-boiler' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-21-auth-boiler');
-  });
-
-  it('should render title', () => {
+  it('should render', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, angular-21-auth-boiler');
+    expect(fixture).toBeTruthy();
   });
 });

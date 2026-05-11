@@ -61,7 +61,7 @@ export class ListComponent implements OnInit, OnDestroy {
         }
     }
 
-    deleteAccount(id: string) {
+    deleteAccount(id: number) {
         const account = this.accounts.find(x => x.id === id);
         if (!account) return;
 

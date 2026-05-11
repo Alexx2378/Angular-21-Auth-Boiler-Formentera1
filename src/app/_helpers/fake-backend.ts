@@ -89,7 +89,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             if(!isAuthenticated()) return unauthorized();
 
             const refreshToken = getRefreshToken();
-            const account = accounts.find(x => x. refreshTokens.includes(refreshToken));
+            const account = accounts.find(x => x.refreshTokens.includes(refreshToken));
+            if (!account) return ok();
 
             account.refreshTokens = account.refreshTokens.filter((x: any) => x !== refreshToken);
             localStorage.setItem(accountsKey, JSON.stringify(accounts));
@@ -196,13 +197,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok();
         }
         function getAccounts() {
-            if(!isAuthenticated()) return unauthorized();
+            if(!isAuthorized(Role.Admin)) return unauthorized();
             return ok(accounts.map(x => basicDetails(x)));
         }
         function getAccountById() {
             if(!isAuthenticated()) return unauthorized();
 
             let account = accounts.find(x => x.id === idFromUrl());
+            if (!account) return error('Account not found');
 
             if (account.id !== currentAccount().id && !isAuthorized(Role.Admin)) {
                 return unauthorized();
@@ -214,7 +216,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             const account = body;
             if (accounts.find(x => x.email === account.email)) {
-                return error(`mail ${account.email} is already registered`);
+                return error(`Email ${account.email} is already registered`);
             }
 
             account.id = newAccountId();
@@ -232,6 +234,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             let params = body;
             let account = accounts.find(x => x.id === idFromUrl ());
+            if (!account) return error('Account not found');
 
             if(account.id !== currentAccount().id && !isAuthorized(Role.Admin)) {
                 return unauthorized();
@@ -252,6 +255,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             if (!isAuthenticated()) return unauthorized();
 
             let account = accounts.find(x => x.id === idFromUrl());
+            if (!account) return error('Account not found');
 
             if (account.id !== currentAccount().id && !isAuthorized(Role.Admin)) {
                 return unauthorized();

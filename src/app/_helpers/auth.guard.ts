@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActiveRouteSnapshot, RouteStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
-import { AccountService } from '@app/_services/account.service';
+import { AccountService } from '@app/_services';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -10,21 +10,18 @@ export class AuthGuard implements CanActivate {
     private accountService: AccountService
   ) {}
 
-  canActivate(route: ActivedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
     const account = this.accountService.accountValue;
     if (account) {
       //check if route is restricted by roles
-      if (route.data.roles && route.data.roles.includes(account.role)) {
-        // role not authorised so redirect to home page
-        this.router.navigate(['/']);
-        return false;
+      if (route.data['roles'] && !route.data['roles'].includes(account.role)) {
+        return this.router.createUrlTree(['/']);
       }
 
       // authorised so return true
       return true;
     }
 
-    this.router.navigate(['/account/login'], { queryParans: { returnUrl: state.url}});
-    return false;
+    return this.router.createUrlTree(['/account/login'], { queryParams: { returnUrl: state.url } });
   }
 }

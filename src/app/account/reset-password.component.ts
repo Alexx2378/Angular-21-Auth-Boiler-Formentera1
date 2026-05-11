@@ -42,6 +42,11 @@ export class ResetPasswordComponent implements OnInit {
         // remove token from url to prevent http referer leakage
         this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
 
+        if (!token) {
+            this.tokenStatus = TokenStatus.Invalid;
+            return;
+        }
+
         this.accountService.validateResetToken(token)
             .pipe(first())
             .subscribe({
@@ -70,7 +75,7 @@ export class ResetPasswordComponent implements OnInit {
         }
 
         this.loading = true;
-        this.accountService.resetPassword(this.token!, this.f['password'].value, this.f['confirmPassword'].value)
+        this.accountService.resetPassword(this.token!, this.f['password'].value)
             .pipe(first())
             .subscribe({
                 next: () => {
