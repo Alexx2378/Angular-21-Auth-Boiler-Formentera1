@@ -1,31 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 
-import { Account, Role } from '@app/_models';
-import { AccountService } from '@app/_services';
+import { AccountService } from './_services';
+import { Account, Role } from './_models';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent implements OnInit, OnDestroy {
-  account?: Account | null;
-  Role = Role;
+@Component({ selector: 'app-root', templateUrl: 'app.component.html', standalone: false })
+export class AppComponent {
+	Role = Role;
+	account?: Account | null;
 
-  private accountSubscription?: Subscription;
+	constructor(private accountService: AccountService) {
+		this.accountService.account.subscribe(x => this.account = x);
+	}
 
-  constructor(private accountService: AccountService) {}
-
-  ngOnInit() {
-    this.accountSubscription = this.accountService.account$.subscribe(x => this.account = x);
-  }
-
-  ngOnDestroy() {
-    this.accountSubscription?.unsubscribe();
-  }
-
-  logout() {
-    this.accountService.logout();
-  }
+	logout() {
+		this.accountService.logout();
+	}
 }
