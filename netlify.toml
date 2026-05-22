@@ -2,6 +2,10 @@
   command = "ng build --configuration production"
   publish = "dist/angular-15-example"
 
+[build.environment]
+  NODE_VERSION = "20.19.0"
+
+
 # ── Proxy API calls to Render backend (bypasses CORS) ──────────────────────
 [[redirects]]
   from = "/api/*"
