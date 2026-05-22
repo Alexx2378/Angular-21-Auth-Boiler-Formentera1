@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://auth-system-backend-j7xw.onrender.com'
+  apiUrl: 'https://node-mysql-api-formentera.onrender.com'
 };
