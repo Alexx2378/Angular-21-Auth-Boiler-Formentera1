@@ -6,14 +6,6 @@
   NODE_VERSION = "20.19.0"
 
 
-# ── Proxy API calls to Render backend (bypasses CORS) ──────────────────────
-[[redirects]]
-  from = "/api/*"
-  to = "https://auth-system-backend-j7xw.onrender.com/:splat"
-  status = 200
-  force = true
-
-# ── SPA fallback (must be last) ────────────────────────────────────────────
 [[redirects]]
   from = "/*"
   to = "/index.html"

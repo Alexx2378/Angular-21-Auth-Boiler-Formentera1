@@ -1,8 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api'
+  apiUrl: 'https://auth-system-backend-j7xw.onrender.com'
 };
-
-
-
-
